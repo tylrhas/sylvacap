@@ -19,7 +19,7 @@ module.exports = sequelize => sequelize.define('stock', {
   datePurchased: {
     type: DATE
   },
-  PurchasePrice: {
+  purchasePrice: {
     type: REAL
   },
   dateSold: {

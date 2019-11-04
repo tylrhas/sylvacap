@@ -5,6 +5,7 @@ module.exports = {
   getAll
 }
 function getAll () {
+  // Remove Timestamps from dates
   return models.stock.findAll()
 }
 function create (data) {
