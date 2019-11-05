@@ -17,6 +17,14 @@ module.exports = (app) => {
     }
     res.json(stocksCreate)
   })
+  app.put('/api/stocks', async (req, res) => {
+    await stock.update(req.body)
+    res.sendStatus(200)
+  })
+  app.delete('/api/stocks/:id', async (req, res) => {
+    await stock.destroy(req.params.id)
+    res.sendStatus(200)
+  })
   app.get('/api/duda/stocks/post', async (req, res) => {
     await duda.getNewStocks()
     res.sendStatus(200)

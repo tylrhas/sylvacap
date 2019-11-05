@@ -1,6 +1,6 @@
 const { INTEGER, STRING, DATE, REAL } = require('sequelize')
 const alpha = require('../controllers/alphaVantage')
-
+const hooks = require('../controllers/modelHooks')
 module.exports = sequelize => sequelize.define('stock', {
   id: {
     autoIncrement: true,
@@ -38,6 +38,12 @@ module.exports = sequelize => sequelize.define('stock', {
       if (!stock.dataValues.dateSold) {
         alpha.getGlobalQuote(stock.dataValues.symbol)
           .then(currentPrice => stock.update({ currentPrice }))
+      }
+    },
+    beforeDestroy: (stock, options) => {
+      const { dudaRowId } = stock.dataValues
+      if (dudaRowId) {
+        hooks.removeStock([dudaRowId])
       }
     }
   }

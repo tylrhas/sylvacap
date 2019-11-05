@@ -20,7 +20,8 @@
   <v-data-table
   :headers='headers'
   :items='stocks'
-  :items-per-page="itemsPerPage"
+  :disable-pagination="disablePagination"
+  :hide-default-footer="hideDefaultFooter"
   :search="search"
   class='elevation-1'
   >
@@ -59,13 +60,13 @@
                     <v-text-field v-model='editedItem.datePurchased' label='Date Purchased'></v-text-field>
                   </v-col>
                   <v-col cols='12' sm='6' md='4'>
-                    <v-text-field v-model='editedItem.purchasePrice' label='Purchase Price'></v-text-field>
+                    <v-text-field v-model='editedItem.purchasePrice' label='Purchase Price ($)'></v-text-field>
                   </v-col>
                   <v-col cols='12' sm='6' md='4'>
                     <v-text-field v-model='editedItem.dateSold' label='Date Sold'></v-text-field>
                   </v-col>
                   <v-col cols='12' sm='6' md='4'>
-                    <v-text-field v-model='editedItem.soldPrice' label='Sold Price'></v-text-field>
+                    <v-text-field v-model='editedItem.soldPrice' label='Sold Price ($)'></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -100,14 +101,16 @@ export default {
     return {
       search: '',
       itemsPerPage: 100,
+      disablePagination: true,
+      hideDefaultFooter: true,
       dialog: false,
       headers: [
         { text: 'Name', value: 'name', align: 'left', sortable: false },
         { text: 'Ticker Symbol', value: 'symbol' },
         { text: 'Date Purchased', value: 'datePurchased' },
-        { text: 'Purchase Price', value: 'purchasePrice' },
+        { text: 'Purchase Price ($)', value: 'purchasePrice' },
         { text: 'Date Sold', value: 'dateSold' },
-        { text: 'Sold Price', value: 'soldPrice' },
+        { text: 'Sold Price ($)', value: 'soldPrice' },
         { text: 'Actions', value: 'action', sortable: false }
       ],
       stocks: [],
@@ -136,18 +139,15 @@ export default {
     })
   },
   methods: {
-
     editItem (item) {
       this.editedIndex = this.stocks.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
-
     deleteItem (item) {
       const index = this.stocks.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.stocks.splice(index, 1)
+      confirm('Are you sure you want to delete this item?') && this.stocks.splice(index, 1) && this.$axios.$delete(`api/stocks/${item.id}`)
     },
-
     close () {
       this.dialog = false
       setTimeout(() => {
@@ -157,8 +157,10 @@ export default {
     },
     save () {
       if (this.editedIndex > -1) {
+        this.$axios.$put('api/stocks', this.editedItem)
         Object.assign(this.stocks[this.editedIndex], this.editedItem)
       } else {
+        this.$axios.$post('api/stocks', { stocks: [this.editedItem] })
         this.stocks.unshift(this.editedItem)
       }
       this.close()
