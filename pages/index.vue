@@ -1,4 +1,21 @@
 <template>
+<div>
+   <v-app-bar
+      app
+      color="indigo"
+      dark
+    >
+      <v-container>
+      <v-toolbar-title>
+        <v-img
+        src="/logo.png"
+        max-width="100"
+      ></v-img>
+      </v-toolbar-title>
+      </v-container>
+    </v-app-bar>
+     <v-content>
+      <v-container>
 <v-card>
   <v-data-table
   :headers='headers'
@@ -10,7 +27,7 @@
     <template v-slot:top>
       <v-toolbar flat>
         <v-card-title>
-      Stocks
+      Portfolio
       </v-card-title>
       <v-spacer></v-spacer>
       <v-text-field
@@ -72,6 +89,9 @@
     </template>
   </v-data-table>
 </v-card>
+      </v-container>
+     </v-content>
+</div>
 </template>
 
 <script>

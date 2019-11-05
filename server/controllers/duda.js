@@ -25,17 +25,23 @@ async function getNewStocks () {
     }
   })
   const rows = stocks.map((stock) => {
-    return {
+    const data = {
+      id: stock.dataValues.dudaRowId,
       data: {
-        'Company Name': stock.dataValues,
-        'Ticker Symbol': stock.dataValues,
-        'Date Purchased': stock.dataValues,
-        'Purchase Price': stock.dataValues,
-        'Date Sold': stock.dataValues,
-        'Sold Price': stock.dataValues,
-        'Current Price': stock.dataValues
+        'Company Name': stock.dataValues.name,
+        'Ticker Symbol': stock.dataValues.symbol,
+        'Date Purchased': moment(stock.dataValues.datePurchased).calendar(),
+        'Purchase Price': stock.dataValues.purchasePrice,
+        'Date Sold': '',
+        'Sold Price': '',
+        'Current Price': stock.dataValues.currentPrice
       }
     }
+    if (stock.dataValues.dateSold) {
+      data.data['Date Sold'] = moment(stock.dataValues.dateSold).calendar()
+      data.data['Sold Price'] = stock.dataValues.soldPrice
+    }
+    return data
   })
   const { data } = await sendNewRows(rows)
   for (let i = 0; i < data.length; i++) {
