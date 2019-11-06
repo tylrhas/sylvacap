@@ -15,8 +15,7 @@ const session = {
   resave: false,
   saveUninitialized: false
 }
-
-if (app.get('env') === 'production') {
+if (process.env.NODE_ENV === 'production') {
   // Serve secure cookies, requires HTTPS
   app.set('trust proxy', 1) // trust first proxy
   session.cookie.secure = true
