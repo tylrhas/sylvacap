@@ -10,7 +10,7 @@ const passport = require('passport')
 const Auth0Strategy = require('passport-auth0')
 require('./controllers/schedule')
 const session = {
-  secret: 'LoxodontaElephasMammuthusPalaeoloxodonPrimelephas',
+  secret: process.env.SESSION_SECRET,
   cookie: {},
   resave: false,
   saveUninitialized: false
@@ -18,6 +18,7 @@ const session = {
 
 if (app.get('env') === 'production') {
   // Serve secure cookies, requires HTTPS
+  app.set('trust proxy', 1) // trust first proxy
   session.cookie.secure = true
 }
 
@@ -41,7 +42,6 @@ const strategy = new Auth0Strategy(
     return done(null, profile)
   }
 )
-
 app.use(expressSession(session))
 
 passport.use(strategy)
