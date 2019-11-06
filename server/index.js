@@ -8,7 +8,7 @@ const path = require('path')
 const expressSession = require('express-session')
 const passport = require('passport')
 const Auth0Strategy = require('passport-auth0')
-
+require('./controllers/schedule')
 const session = {
   secret: 'LoxodontaElephasMammuthusPalaeoloxodonPrimelephas',
   cookie: {},
@@ -65,7 +65,6 @@ app.use((req, res, next) => {
 
 const secured = (req, res, next) => {
   if (req.user) {
-    console.log(req.user)
     return next()
   }
   req.session.returnTo = req.originalUrl

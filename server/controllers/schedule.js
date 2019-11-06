@@ -17,10 +17,14 @@ schedule.scheduleJob('0 4 * * *', () => {
   }
 })
 
-schedule.scheduleJob('0 */2 * * *', () => {
+schedule.scheduleJob('0 4 * * *', () => {
   try {
-    duda.updateCurrentStocks()
+    duda.updateCurrentPrices()
   } catch (error) {
     console.log(error)
   }
+})
+
+schedule.scheduleJob('*/20 * * * *', () => {
+  console.log('Stay Awake')
 })
