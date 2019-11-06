@@ -1,3 +1,4 @@
+require('dotenv').config()
 const colors = require('vuetify/es5/util/colors').default
 
 module.exports = {
@@ -52,6 +53,7 @@ module.exports = {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+    browserBaseURL: `//${process.env.BROWSER_URL}`
   },
   /*
   ** vuetify module configuration
