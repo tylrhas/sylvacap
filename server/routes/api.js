@@ -30,8 +30,8 @@ module.exports = (app) => {
     res.sendStatus(200)
   })
   app.get('/api/duda/stocks/update', async (req, res) => {
-    const data = await duda.updateCurrentPrices()
-    res.json(data)
+    await duda.updateCurrentPrices()
+    res.sendStatus(200)
   })
   app.get('/api/alpha/stocks/update', (req, res) => {
     duda.updateCurrentStocks()

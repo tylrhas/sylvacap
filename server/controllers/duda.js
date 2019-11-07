@@ -89,10 +89,16 @@ function getUpdates () {
 
 function sendUpdates (body) {
   return http.put(`${DUDA_BASE_URL}/${DUDA_SITE_ID}/collection/${DUDA_STOCK_COLLECTION_NAME}/row`, body, { headers: { authorization: DUDA_AUTH_HEADER } })
+    .then(() => {
+      return publishChanges()
+    })
 }
 
 function sendNewRows (body) {
   return http.post(`${DUDA_BASE_URL}/${DUDA_SITE_ID}/collection/${DUDA_STOCK_COLLECTION_NAME}/row`, body, { headers: { authorization: DUDA_AUTH_HEADER } })
+    .then(() => {
+      return publishChanges()
+    })
 }
 
 async function updateCurrentStocks () {
@@ -107,4 +113,8 @@ async function updateCurrentStocks () {
     const currentPrice = await alpha.getGlobalQuote(stock.dataValues.symbol)
     stock.update({ currentPrice })
   }
+}
+
+function publishChanges () {
+  return http.post(`${DUDA_BASE_URL}/${DUDA_SITE_ID}/content/publish`, {}, { headers: { authorization: DUDA_AUTH_HEADER } })
 }
