@@ -21,7 +21,7 @@ schedule.scheduleJob('0 */3 * * *', async () => {
   }
 })
 
-schedule.scheduleJob('45 */3 * * *', () => {
+schedule.scheduleJob('45 */3 * * *', async () => {
   try {
     console.log('updating current prices')
     await duda.updateCurrentPrices()
