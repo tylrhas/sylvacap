@@ -1,10 +1,10 @@
-const models = require('../models')
 const { Sequelize } = models
 const { Op } = Sequelize
 const moment = require('moment')
 
 const axios = require('axios')
 const rateLimit = require('axios-rate-limit')
+const models = require('../models')
 const http = rateLimit(axios.create(), { maxRequests: 5, perMilliseconds: 1000 })
 const alpha = require('./alphaVantage')
 const {
@@ -43,9 +43,11 @@ async function getNewStocks () {
     }
     return data
   })
-  const { data } = await sendNewRows(rows)
-  for (let i = 0; i < data.length; i++) {
-    await stocks[i].update({ dudaRowId: data[i].id })
+  if (rows.length > 0) {
+    const { data } = await sendNewRows(rows)
+    for (let i = 0; i < data.length; i++) {
+      await stocks[i].update({ dudaRowId: data[i].id })
+    }
   }
 }
 
