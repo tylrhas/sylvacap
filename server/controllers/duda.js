@@ -1,10 +1,10 @@
+const models = require('../models')
 const { Sequelize } = models
 const { Op } = Sequelize
 const moment = require('moment')
 
 const axios = require('axios')
 const rateLimit = require('axios-rate-limit')
-const models = require('../models')
 const http = rateLimit(axios.create(), { maxRequests: 5, perMilliseconds: 1000 })
 const alpha = require('./alphaVantage')
 const {
