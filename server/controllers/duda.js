@@ -26,7 +26,7 @@ async function getNewStocks () {
   })
   const rows = stocks.map((stock) => {
     const data = {
-      id: stock.dataValues.dudaRowId,
+      // id: stock.dataValues.dudaRowId,
       data: {
         'Company Name': stock.dataValues.name,
         'Ticker Symbol': stock.dataValues.symbol,
@@ -98,8 +98,10 @@ function sendUpdates (body) {
 
 function sendNewRows (body) {
   return http.post(`${DUDA_BASE_URL}/${DUDA_SITE_ID}/collection/${DUDA_STOCK_COLLECTION_NAME}/row`, body, { headers: { authorization: DUDA_AUTH_HEADER } })
-    .then(() => {
-      return publishChanges()
+    .then(async (res) => {
+      const { data } = res
+      const changes = await publishChanges()
+      return { data, changes }
     })
 }
 
