@@ -63,6 +63,7 @@ function getUpdates () {
       updatedAt: {
         [Op.lte]: lastRun
       },
+      dateSold: null,
       dudaRowId: {
         [Op.not]: null
       }
