@@ -61,7 +61,7 @@ function getUpdates () {
   return models.stock.findAll({
     where: {
       updatedAt: {
-        [Op.between]: [lastRun, now]
+        [Op.lte]: lastRun
       },
       dudaRowId: {
         [Op.not]: null
