@@ -118,18 +118,18 @@ export default {
       editedItem: {
         name: '',
         symbol: '',
-        datePurchased: '01/01/2019',
+        datePurchased: null,
         purchasePrice: 0,
-        dateSold: '01/01/2019',
-        soldPrice: 0
+        dateSold: null,
+        soldPrice: null
       },
       defaultItem: {
         name: '',
         symbol: '',
-        datePurchased: '01/01/2019',
+        datePurchased: null,
         purchasePrice: 0,
-        dateSold: '01/01/2019',
-        soldPrice: 0
+        dateSold: null,
+        soldPrice: null
       }
     }
   },

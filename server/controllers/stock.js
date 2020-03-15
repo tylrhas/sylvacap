@@ -15,14 +15,14 @@ function getAll () {
         id: stock.dataValues.id,
         name: stock.dataValues.name,
         symbol: stock.dataValues.symbol,
-        datePurchased: moment(stock.dataValues.datePurchased).calendar(),
+        datePurchased: moment(stock.dataValues.datePurchased).format('MM/DD/YYYY'),
         purchasePrice: stock.dataValues.purchasePrice,
         dateSold: '',
         soldPrice: '',
         currentPrice: stock.dataValues.currentPrice
       }
       if (stock.dataValues.dateSold) {
-        data.dateSold = moment(stock.dataValues.dateSold).calendar()
+        data.dateSold = moment(stock.dataValues.dateSold).format('MM/DD/YYYY')
         data.soldPrice = stock.dataValues.soldPrice
       }
       return data
