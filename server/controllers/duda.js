@@ -16,7 +16,9 @@ const {
 module.exports = {
   updateCurrentPrices,
   getNewStocks,
-  updateCurrentStocks
+  updateCurrentStocks,
+  sendNewRows,
+  sendUpdates
 }
 async function getNewStocks () {
   const stocks = await models.stock.findAll({
@@ -30,7 +32,7 @@ async function getNewStocks () {
       data: {
         'Company Name': stock.dataValues.name,
         'Ticker Symbol': stock.dataValues.symbol,
-        'Date Purchased': moment(stock.dataValues.datePurchased).calendar(),
+        'Date Purchased': moment(stock.dataValues.datePurchased).format('MM/DD/YYYY'),
         'Purchase Price': stock.dataValues.purchasePrice,
         'Date Sold': '',
         'Sold Price': '',
@@ -38,13 +40,13 @@ async function getNewStocks () {
       }
     }
     if (stock.dataValues.dateSold) {
-      data.data['Date Sold'] = moment(stock.dataValues.dateSold).calendar()
+      data.data['Date Sold'] = moment(stock.dataValues.dateSold).format('MM/DD/YYYY')
       data.data['Sold Price'] = stock.dataValues.soldPrice
     }
     return data
   })
   if (rows.length > 0) {
-    const { data } = await sendNewRows(rows)
+    const { data } = await sendNewRows(rows, DUDA_STOCK_COLLECTION_NAME)
     for (let i = 0; i < data.length; i++) {
       await stocks[i].update({ dudaRowId: data[i].id })
     }
@@ -53,7 +55,7 @@ async function getNewStocks () {
 
 async function updateCurrentPrices () {
   const updates = await getUpdates()
-  return sendUpdates(updates)
+  return sendUpdates(updates, DUDA_STOCK_COLLECTION_NAME)
 }
 function getUpdates () {
   const lastRun = moment.utc().subtract(5, 'hours')
@@ -89,15 +91,15 @@ function getUpdates () {
     }))
 }
 
-function sendUpdates (body) {
-  return http.put(`${DUDA_BASE_URL}/${DUDA_SITE_ID}/collection/${DUDA_STOCK_COLLECTION_NAME}/row`, body, { headers: { authorization: DUDA_AUTH_HEADER } })
+function sendUpdates (body, collection) {
+  return http.put(`${DUDA_BASE_URL}/${DUDA_SITE_ID}/collection/${collection}/row`, body, { headers: { authorization: DUDA_AUTH_HEADER } })
     .then(() => {
       return publishChanges()
     })
 }
 
-function sendNewRows (body) {
-  return http.post(`${DUDA_BASE_URL}/${DUDA_SITE_ID}/collection/${DUDA_STOCK_COLLECTION_NAME}/row`, body, { headers: { authorization: DUDA_AUTH_HEADER } })
+function sendNewRows (body, collection) {
+  return http.post(`${DUDA_BASE_URL}/${DUDA_SITE_ID}/collection/${collection}/row`, body, { headers: { authorization: DUDA_AUTH_HEADER } })
     .then(async (res) => {
       const { data } = res
       const changes = await publishChanges()
