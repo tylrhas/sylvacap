@@ -68,10 +68,10 @@ schedule.scheduleJob('30 */3 * * *', async () => {
       }
     }
     if (marketUpdates.length > 0) {
-      await duda.sendUpdates(marketUpdates)
+      await duda.sendUpdates(marketUpdates, 'markets')
     }
     if (newMarkets.length > 0) {
-      await duda.sendUpdates(newMarkets)
+      await duda.sendUpdates(newMarkets, 'markets')
     }
     console.log('done updating current market prices')
     console.log('Updating Duda Collection')
