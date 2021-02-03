@@ -8,7 +8,7 @@ module.exports = sequelize => sequelize.define('stock', {
     type: INTEGER
   },
   dudaRowId: {
-    type: INTEGER
+    type: STRING
   },
   name: {
     type: STRING
